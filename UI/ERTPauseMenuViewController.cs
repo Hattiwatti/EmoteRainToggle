@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace EmoteRainToggle.UI
 {
-    [HotReload(@"C:\Users\Hattiwatti\source\repos\EmoteRainToggle\UI\PauseMenu.bsml")]
+    [ViewDefinition("EmoteRainToggle.UI.PauseMenu.bsml")]
     internal class ERTPauseMenuViewController : BSMLAutomaticViewController
     {
         public FloatingScreen _FloatingScreen { get; set; }

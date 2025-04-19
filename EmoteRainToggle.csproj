@@ -149,7 +149,7 @@
   <ItemGroup>
     <None Include="Directory.Build.props" Condition="Exists('Directory.Build.props')" />
     <None Include="EmoteRainToggle.csproj.user" Condition="Exists('EmoteRainToggle.csproj.user')" />
-    <None Include="UI\PauseMenu.bsml" />
+    <EmbeddedResource Include="UI\PauseMenu.bsml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="BeatSaberModdingTools.Tasks">

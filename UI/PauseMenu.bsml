@@ -1,0 +1,12 @@
+<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:noNamespaceSchemaLocation='https://monkeymanboy.github.io/BSML-Docs/BSMLSchema.xsd'>
+
+	<modifier-container child-expand-width='true' horizontal-fit='PreferredSize' >
+		<checkbox text='Emote Rain' value='EmoteRainEnabled' bind-value='true' apply-on-change='true'/>
+		<!--
+		<slider-setting text='Y' min='0' max='3' increment='0.1' value='YPos' bind-value='true' show-buttons='true' apply-on-change='true' ></slider-setting>
+		<slider-setting text='Z' min='0' max='3' increment='0.1' value='ZPos' bind-value='true' show-buttons='true' apply-on-change='true' ></slider-setting>
+		-->
+	</modifier-container>
+
+</bg>

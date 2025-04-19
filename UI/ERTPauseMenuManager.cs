@@ -1,7 +1,6 @@
 ﻿using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.FloatingScreen;
 using System;
-using System.Linq;
 using UnityEngine;
 using Zenject;
 
@@ -13,11 +12,13 @@ namespace EmoteRainToggle.UI
         private FloatingScreen _floatingScreen;
 
         private PauseController _pauseController;
+        private PauseMenuManager _pauseMenuManager;
 
 
-        private ERTPauseMenuManager(PauseController pauseController)
+        private ERTPauseMenuManager(PauseController pauseController, PauseMenuManager pauseMenuManager)
         {
             _pauseController = pauseController;
+            _pauseMenuManager = pauseMenuManager;
         }
 
         public void Initialize()
@@ -25,44 +26,44 @@ namespace EmoteRainToggle.UI
             _viewController = BeatSaberUI.CreateViewController<ERTPauseMenuViewController>();
 
             _floatingScreen = FloatingScreen.CreateFloatingScreen(
-                new Vector2(100, 50),
+                new Vector2(100, 25),
                 false,
-                new Vector3(0, 0.8f, 1.9f),
-                Quaternion.identity,
-                0,
-                true);
+                new Vector3(0, 0.85f, 1.9f),
+                Quaternion.identity);
 
             _viewController._FloatingScreen = _floatingScreen;
 
             _floatingScreen.SetRootViewController(_viewController, HMUI.ViewController.AnimationType.None);
 
-            _pauseController.didPauseEvent += OnPause;
-            _pauseController.didResumeEvent += OnResume;
-            _pauseController.didReturnToMenuEvent += OnReturnToMenu;
+            _pauseController.didPauseEvent += OnShowPauseMenu;
+            _pauseMenuManager.didPressContinueButtonEvent += OnHidePauseMenu;
+            _pauseMenuManager.didPressMenuButtonEvent += OnHidePauseMenu;
+            _pauseMenuManager.didPressRestartButtonEvent += OnHidePauseMenu;
 
             _floatingScreen.gameObject.SetActive(false);
+        }
+
+        public void Dispose()
+        {
+            _pauseController.didPauseEvent -= OnShowPauseMenu;
+            _pauseMenuManager.didPressContinueButtonEvent -= OnHidePauseMenu;
+            _pauseMenuManager.didPressMenuButtonEvent -= OnHidePauseMenu;
+            _pauseMenuManager.didPressRestartButtonEvent -= OnHidePauseMenu;
+        }
+
+        private void OnHidePauseMenu()
+        {
+            _floatingScreen.gameObject.SetActive(false);
+        }
+
+        private void OnShowPauseMenu()
+        {
+            _floatingScreen.gameObject.SetActive(true);
         }
 
         private void OnReturnToMenu()
         {
             _floatingScreen.gameObject.SetActive(false);
-        }
-
-        private void OnResume()
-        {
-            _floatingScreen.gameObject.SetActive(false);
-        }
-
-        private void OnPause()
-        {
-            _floatingScreen.gameObject.SetActive(true);
-        }
-
-        public void Dispose() 
-        {
-            _pauseController.didPauseEvent -= OnPause;
-            _pauseController.didResumeEvent -= OnResume;
-            _pauseController.didReturnToMenuEvent -= OnReturnToMenu;
         }
     }
 }

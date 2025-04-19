@@ -2,11 +2,14 @@
   "$schema": "https://raw.githubusercontent.com/bsmg/BSIPA-MetadataFileSchema/master/Schema.json",
   "id": "EmoteRainToggle",
   "name": "EmoteRainToggle",
-  "author": "",
-  "version": "0.0.1",
-  "description": "",
-  "gameVersion": "1.18.3",
+  "author": "Hatti",
+  "version": "1.0.0",
+  "description": "Adds a toggle button for emote rain in the pause menu",
+  "gameVersion": "1.39.1",
   "dependsOn": {
-    "BSIPA": "^4.2.0"
+    "BSIPA": "^4.3.5",
+    "BeatSaberMarkupLanguage": "^1.12.4",
+    "SiraUtil": "^3.1.14",
+    "BeatSaberPlus_ChatEmoteRain": "6.3.3.0"
   }
 }

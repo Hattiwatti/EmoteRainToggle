@@ -1,14 +1,11 @@
 ﻿using System;
-using BeatSaberMarkupLanguage;
 using BeatSaberMarkupLanguage.Attributes;
 using BeatSaberMarkupLanguage.FloatingScreen;
 using BeatSaberMarkupLanguage.ViewControllers;
-using BeatSaberPlus_ChatEmoteRain;
+using HarmonyLib;
 using ChatPlexMod_ChatEmoteRain;
-using HMUI;
-using IPA.Config;
-using UnityEngine;
-using Zenject;
+using CP_SDK.XUI;
+using System.Reflection;
 
 namespace EmoteRainToggle.UI
 {
@@ -16,46 +13,37 @@ namespace EmoteRainToggle.UI
     internal class ERTPauseMenuViewController : BSMLAutomaticViewController
     {
         public FloatingScreen _FloatingScreen { get; set; }
+        private Traverse _enableSong;
+        private XUIToggle _playingRain;
+
         public ERTPauseMenuViewController()
         {
+            Assembly assembly = Assembly.GetAssembly(typeof(ChatEmoteRain));
+
+            Type t = assembly.GetType("ChatPlexMod_ChatEmoteRain.CERConfig", true).BaseType;
+            MethodInfo mi = t.GetMethod("get_Instance", BindingFlags.Static | BindingFlags.Public);
+
+            object cerConfig = mi.Invoke(null, null);
+            _enableSong = Traverse.Create(cerConfig).Field("EnableSong");
+
+            t = assembly.GetType("ChatPlexMod_ChatEmoteRain.UI.SettingsMainView", true).BaseType;
+            object settingsMainView = Traverse.Create(t).Field("Instance").GetValue();
+
+            _playingRain = Traverse.Create(settingsMainView).Field("m_GeneralTab_PlayingRain").GetValue() as XUIToggle;
         }
 
         [UIValue("EmoteRainEnabled")]
         private bool EmoteRainEnabled
         {
-            get => ChatEmoteRain.Instance.IsEnabled;
-            set => ChatEmoteRain.Instance.SetEnabled(value);
+            get
+            {
+                return _enableSong?.GetValue<bool>() ?? false;
+            }
+            set
+            {
+                _enableSong?.SetValue(value);
+                _playingRain?.SetValue(value);
+            }
         }  
-
-        [UIValue("YPos")]
-        private float YPos
-        {
-            get
-            {
-                return _FloatingScreen.transform.position.y;
-            }
-            set
-            {
-                Vector3 currentPos = _FloatingScreen.transform.position;
-                currentPos.y = value;
-                _FloatingScreen.transform.position = currentPos;
-            }
-        }
-
-        [UIValue("ZPos")]
-        private float ZPos
-        {
-            get
-            {
-                return _FloatingScreen.transform.position.y;
-            }
-            set
-            {
-                Vector3 currentPos = _FloatingScreen.transform.position;
-                currentPos.z = value;
-                _FloatingScreen.transform.position = currentPos;
-            }
-        }
-
     }
 }
